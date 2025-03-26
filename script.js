@@ -5,9 +5,10 @@ let games = [];
 const PLAYER_NAMES = ['Avtukhov', 'Lesha', 'Zheka'];
 
 // GitHub API configuration
-const GITHUB_USERNAME = 'jeyojey'; // Replace with your GitHub username
-const REPO_NAME = 'board-games-stats'; // Replace with your repository name
+const GITHUB_USERNAME = 'jeyojey';
+const REPO_NAME = 'board-games-stats';
 const GAMES_FILE_PATH = 'data/games.json';
+const GITHUB_TOKEN = 'YOUR_TOKEN_HERE'; // Replace this with your GitHub token
 
 // DOM Elements
 const gameForm = document.getElementById('gameForm');
@@ -21,7 +22,7 @@ async function loadGames() {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${GAMES_FILE_PATH}`);
         if (response.ok) {
             const data = await response.json();
-            const content = atob(data.content); // Decode base64 content
+            const content = atob(data.content);
             games = JSON.parse(content);
             displayGames();
         }
@@ -51,7 +52,7 @@ async function saveGames() {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${GAMES_FILE_PATH}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `token ${localStorage.getItem('github_token')}`,
+                'Authorization': `token ${GITHUB_TOKEN}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -66,7 +67,7 @@ async function saveGames() {
         }
     } catch (error) {
         console.error('Error saving games:', error);
-        alert('Failed to save games. Please check your GitHub token.');
+        alert('Failed to save the game. Please try again later.');
     }
 }
 
@@ -106,7 +107,7 @@ function displayGames() {
         new Date(b.date) - new Date(a.date)
     );
 
-    sortedGames.forEach((game, index) => {
+    sortedGames.forEach((game) => {
         const gameEntry = document.createElement('div');
         gameEntry.className = 'game-entry';
         
@@ -129,27 +130,8 @@ function displayGames() {
     });
 }
 
-// Check for GitHub token
-function checkGitHubToken() {
-    const token = localStorage.getItem('github_token');
-    if (!token) {
-        const newToken = prompt('Please enter your GitHub Personal Access Token:');
-        if (newToken) {
-            localStorage.setItem('github_token', newToken);
-            return true;
-        }
-        return false;
-    }
-    return true;
-}
-
 gameForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    if (!checkGitHubToken()) {
-        alert('GitHub token is required to save games. Please refresh the page and enter your token.');
-        return;
-    }
     
     const gameName = document.getElementById('gameName').value;
     const scores = [];
