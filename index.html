@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Games Stats Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Board Games Stats</h1>
+        
+        <div class="game-form">
+            <h2>Add New Game Result</h2>
+            <form id="gameForm">
+                <div class="form-group">
+                    <label for="gameName">Select Game</label>
+                    <select id="gameName" required>
+                        <option value="">Choose a game...</option>
+                        <option value="Terraforming Mars">Terraforming Mars</option>
+                        <option value="Great Western Trail">Great Western Trail</option>
+                        <option value="Heat: Pedal to the Metal">Heat: Pedal to the Metal</option>
+                    </select>
+                </div>
+
+                <div id="playerScores">
+                    <!-- Player score inputs will be dynamically added here -->
+                </div>
+
+                <button type="submit">Save Game Result</button>
+            </form>
+        </div>
+
+        <div class="game-history">
+            <h2>Game History</h2>
+            <div id="gameList">
+                <!-- Game history will be displayed here -->
+            </div>
+            <div id="emptyState" style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                No games recorded yet. Add your first game result above!
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
