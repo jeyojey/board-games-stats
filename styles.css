@@ -1,14 +1,14 @@
 :root {
-    --primary-color: #2563eb;
-    --primary-hover: #1d4ed8;
-    --background: #f8fafc;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --winner-color: #22c55e;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --primary-color: #d4a257;
+    --primary-hover: #c28d3c;
+    --background: #1a1612;
+    --card-bg: rgba(41, 31, 24, 0.95);
+    --text-primary: #e8d5b5;
+    --text-secondary: #b8a182;
+    --border-color: #634832;
+    --winner-color: #9ab973;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 * {
@@ -18,31 +18,45 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Crimson Text', 'Palatino', serif;
     line-height: 1.6;
     background-color: var(--background);
     color: var(--text-primary);
     padding: 1.5rem;
+    background-image: url('./images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
+    background: rgba(26, 22, 18, 0.85);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
 }
 
 h1 {
     text-align: center;
-    color: var(--text-primary);
+    color: var(--primary-color);
     margin-bottom: 1.5rem;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Cinzel Decorative', 'Palatino', serif;
 }
 
 h2 {
-    color: var(--text-primary);
+    color: var(--primary-color);
     margin-bottom: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-family: 'Cinzel Decorative', 'Palatino', serif;
 }
 
 .game-form {
@@ -52,6 +66,18 @@ h2 {
     box-shadow: var(--shadow-md);
     margin-bottom: 1.5rem;
     border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
 }
 
 .form-group {
@@ -67,7 +93,9 @@ label {
     margin-bottom: 0.375rem;
     color: var(--text-primary);
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 input, select {
@@ -76,15 +104,15 @@ input, select {
     border: 1px solid var(--border-color);
     border-radius: 0.375rem;
     font-size: 0.95rem;
-    background-color: var(--card-bg);
+    background-color: rgba(41, 31, 24, 0.7);
     color: var(--text-primary);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 select {
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a257' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 1em 1em;
@@ -94,21 +122,25 @@ select {
 input:focus, select:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 2px rgba(212, 162, 87, 0.2);
 }
 
 button {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--background);
     padding: 0.625rem 1rem;
     border: none;
     border-radius: 0.375rem;
     cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
     width: 100%;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
 }
 
 button:hover {
@@ -126,15 +158,26 @@ button:active {
     border-radius: 0.75rem;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
+    position: relative;
+}
+
+.game-history::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
 }
 
 .game-entry {
     padding: 1rem;
     border-radius: 0.5rem;
-    background: var(--background);
+    background: rgba(41, 31, 24, 0.7);
     margin-bottom: 0.75rem;
     border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .game-entry:last-child {
@@ -144,32 +187,35 @@ button:active {
 .game-entry:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
+    background: rgba(41, 31, 24, 0.9);
 }
 
 .game-entry h3 {
-    color: var(--text-primary);
+    color: var(--primary-color);
     margin-bottom: 0.75rem;
     font-size: 1.1rem;
     font-weight: 600;
+    font-family: 'Cinzel Decorative', 'Palatino', serif;
 }
 
 .player-score {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.375rem 0.5rem;
+    padding: 0.375rem 0.75rem;
     margin: 0.375rem 0;
     border-radius: 0.375rem;
-    background: var(--card-bg);
+    background: rgba(41, 31, 24, 0.5);
     border: 1px solid var(--border-color);
     font-size: 0.95rem;
+    transition: all 0.2s ease;
 }
 
 .winner {
     color: var(--winner-color);
     font-weight: 600;
-    background-color: rgba(34, 197, 94, 0.1);
-    border-color: rgba(34, 197, 94, 0.2);
+    background: rgba(154, 185, 115, 0.1);
+    border-color: rgba(154, 185, 115, 0.3);
 }
 
 small {
@@ -177,4 +223,12 @@ small {
     margin-top: 0.75rem;
     color: var(--text-secondary);
     font-size: 0.8rem;
+    font-style: italic;
+}
+
+#emptyState {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 2rem;
+    font-style: italic;
 } 

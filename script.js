@@ -5,7 +5,7 @@ let games = [];
 const PLAYER_NAMES = ['Avtukhov', 'Lesha', 'Zheka'];
 
 // GitHub API configuration
-const GITHUB_USERNAME = 'YOUR_GITHUB_USERNAME'; // Replace with your GitHub username
+const GITHUB_USERNAME = 'jeyojey'; // Replace with your GitHub username
 const REPO_NAME = 'board-games-stats'; // Replace with your repository name
 const GAMES_FILE_PATH = 'data/games.json';
 
