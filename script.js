@@ -4,11 +4,8 @@ let games = [];
 // Player names
 const PLAYER_NAMES = ['Avtukhov', 'Lesha', 'Zheka'];
 
-// GitHub API configuration
-const GITHUB_USERNAME = 'jeyojey';
-const REPO_NAME = 'board-games-stats';
-const GAMES_FILE_PATH = 'data/games.json';
-const GITHUB_TOKEN = 'YOUR_TOKEN_HERE'; // Replace this with your GitHub token
+// Storage key
+const STORAGE_KEY = 'boardGamesStats';
 
 // DOM Elements
 const gameForm = document.getElementById('gameForm');
@@ -16,58 +13,27 @@ const playerScoresDiv = document.getElementById('playerScores');
 const gameList = document.getElementById('gameList');
 const emptyState = document.getElementById('emptyState');
 
-// Load saved games from GitHub
-async function loadGames() {
+// Load saved games from localStorage
+function loadGames() {
     try {
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${GAMES_FILE_PATH}`);
-        if (response.ok) {
-            const data = await response.json();
-            const content = atob(data.content);
-            games = JSON.parse(content);
-            displayGames();
+        const savedGames = localStorage.getItem(STORAGE_KEY);
+        if (savedGames) {
+            games = JSON.parse(savedGames);
         }
+        displayGames();
     } catch (error) {
-        console.log('No existing games file found. Starting fresh.');
+        console.log('No existing games found. Starting fresh.');
         displayGames();
     }
 }
 
-// Save games to GitHub
-async function saveGames() {
+// Save games to localStorage
+function saveGames() {
     try {
-        // First, get the current file to get its SHA
-        const getResponse = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${GAMES_FILE_PATH}`);
-        let sha;
-        
-        if (getResponse.ok) {
-            const data = await getResponse.json();
-            sha = data.sha;
-        }
-
-        // Prepare the content
-        const content = JSON.stringify(games, null, 2);
-        const encodedContent = btoa(content);
-
-        // Create or update the file
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${GAMES_FILE_PATH}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                message: 'Update games data',
-                content: encodedContent,
-                sha: sha
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save games');
-        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
     } catch (error) {
         console.error('Error saving games:', error);
-        alert('Failed to save the game. Please try again later.');
+        alert('Failed to save the game. Please make sure you have enough storage space.');
     }
 }
 
@@ -130,6 +96,36 @@ function displayGames() {
     });
 }
 
+// Add export/import functionality
+function exportGames() {
+    const dataStr = JSON.stringify(games, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+    
+    const exportLink = document.createElement('a');
+    exportLink.setAttribute('href', dataUri);
+    exportLink.setAttribute('download', 'board-games-stats.json');
+    exportLink.click();
+}
+
+function importGames(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const importedGames = JSON.parse(e.target.result);
+                games = importedGames;
+                saveGames();
+                displayGames();
+                alert('Games imported successfully!');
+            } catch (error) {
+                alert('Error importing games. Please make sure the file is valid.');
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+
 gameForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -152,7 +148,7 @@ gameForm.addEventListener('submit', async (e) => {
     
     // Add to games array and save
     games.push(newGame);
-    await saveGames();
+    saveGames();
     
     // Reset form and update display
     gameForm.reset();

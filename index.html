@@ -35,7 +35,14 @@
         </div>
         
         <div class="game-history">
-            <h2>Game History</h2>
+            <div class="history-header">
+                <h2>Game History</h2>
+                <div class="history-actions">
+                    <button onclick="exportGames()" class="action-button">Export Games</button>
+                    <label for="importFile" class="action-button">Import Games</label>
+                    <input type="file" id="importFile" accept=".json" onchange="importGames(event)" style="display: none;">
+                </div>
+            </div>
             <div id="emptyState">📜 No games recorded yet. Add your first game result above!</div>
             <div id="gameList">
                 <!-- Game entries will be added here -->
