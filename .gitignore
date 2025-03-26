@@ -1,0 +1,6 @@
+# Configuration file with sensitive data
+config.js
+
+# System files
+.DS_Store
+Thumbs.db 

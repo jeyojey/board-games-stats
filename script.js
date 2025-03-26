@@ -4,8 +4,8 @@ let games = [];
 // Player names
 const PLAYER_NAMES = ['Avtukhov', 'Lesha', 'Zheka'];
 
-// Storage key
-const STORAGE_KEY = 'boardGamesStats';
+// GitHub API configuration
+const GAMES_FILE_PATH = 'data/games.json';
 
 // DOM Elements
 const gameForm = document.getElementById('gameForm');
@@ -13,27 +13,58 @@ const playerScoresDiv = document.getElementById('playerScores');
 const gameList = document.getElementById('gameList');
 const emptyState = document.getElementById('emptyState');
 
-// Load saved games from localStorage
-function loadGames() {
+// Load saved games from GitHub
+async function loadGames() {
     try {
-        const savedGames = localStorage.getItem(STORAGE_KEY);
-        if (savedGames) {
-            games = JSON.parse(savedGames);
+        const response = await fetch(`https://api.github.com/repos/${config.username}/${config.repository}/contents/${GAMES_FILE_PATH}`);
+        if (response.ok) {
+            const data = await response.json();
+            const content = atob(data.content);
+            games = JSON.parse(content);
+            displayGames();
         }
-        displayGames();
     } catch (error) {
         console.log('No existing games found. Starting fresh.');
         displayGames();
     }
 }
 
-// Save games to localStorage
-function saveGames() {
+// Save games to GitHub
+async function saveGames() {
     try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
+        // First, get the current file to get its SHA
+        const getResponse = await fetch(`https://api.github.com/repos/${config.username}/${config.repository}/contents/${GAMES_FILE_PATH}`);
+        let sha;
+        
+        if (getResponse.ok) {
+            const data = await getResponse.json();
+            sha = data.sha;
+        }
+
+        // Prepare the content
+        const content = JSON.stringify(games, null, 2);
+        const encodedContent = btoa(content);
+
+        // Create or update the file
+        const response = await fetch(`https://api.github.com/repos/${config.username}/${config.repository}/contents/${GAMES_FILE_PATH}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${config.token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: 'Update games data',
+                content: encodedContent,
+                sha: sha
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save games');
+        }
     } catch (error) {
         console.error('Error saving games:', error);
-        alert('Failed to save the game. Please make sure you have enough storage space.');
+        alert('Failed to save the game. Please try again later.');
     }
 }
 
@@ -148,7 +179,7 @@ gameForm.addEventListener('submit', async (e) => {
     
     // Add to games array and save
     games.push(newGame);
-    saveGames();
+    await saveGames();
     
     // Reset form and update display
     gameForm.reset();
