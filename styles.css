@@ -23,7 +23,7 @@ body {
     background-color: var(--background);
     color: var(--text-primary);
     padding: 1.5rem;
-    background-image: url('./images/background.jpg');
+    background: linear-gradient(to bottom right, #1a1612, #2a2016);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
